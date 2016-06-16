@@ -64,6 +64,9 @@ class ElEmasAgent(EmasAgent):
     def get_prestige(self):
         return self.prestige
 
+    def __str__(self):
+        return "f:%s p:%s e:%s" % (str(self.get_fitness()),str(self.parent),str(self.elitist))
+
 
 class ElEmasService(EmasService):
     @Inject("prestige_minimum")
@@ -77,7 +80,7 @@ class ElEmasService(EmasService):
         return not agent.is_elitist() and super(ElEmasService,self).can_migrate(agent)
 
     def can_become_elitist(self,agent):
-        return agent.get_prestige() > self.prestige_minimum
+        return agent.get_prestige() > self.prestige_minimum and not agent.is_elitist()
 
     def reproduce(self, a1, a2):
         logger.debug(str(a1) + " " + str(a2) + " reproducing!")
@@ -95,9 +98,12 @@ class ParentMigrationWithElite(ParentMigration):
         siblings = filter(lambda x:x.name!="elitist" ,list(agent.parent.parent.get_agents()))
         return siblings
 
+
     def __get_elite(self,agent):
         siblings = filter(lambda x:x.name=="elitist" ,list(agent.parent.parent.get_agents()))
         return siblings[0]
+
+
 
     def become_elitist(self,agent):
         try:

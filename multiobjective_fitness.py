@@ -22,3 +22,16 @@ class MultiobjectiveFitness():
 
     def __abs__(self):
         return self.fitnessTuple
+
+def findFront(points):
+    front = []
+    for point in points:
+        isDominated = False
+        for x in points:
+            if point<x:
+                isDominated = True
+                break
+        if not isDominated:
+            front.append(point)
+    return front
+

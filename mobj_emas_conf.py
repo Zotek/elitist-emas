@@ -20,6 +20,8 @@ from statistics import MultiObjectiveStats
 
 logger = logging.getLogger(__name__)
 
+
+
 agents_count = int(os.environ['AGENTS'])
 logger.debug("EMAS, %s agents", agents_count)
 agents = unnamed_agents_with_elitist(agents_count, AggregateAgent)
@@ -27,9 +29,9 @@ agents = unnamed_agents_with_elitist(agents_count, AggregateAgent)
 
 
 
-stop_condition = lambda: StepLimitStopCondition(10)
+stop_condition = lambda: StepLimitStopCondition(500)
 
-aggregated_agents = lambda: elemas_initializer(dims=30,energy=100,size=5, lowerbound=0.0, upperbound=1.0)
+aggregated_agents = lambda: elemas_initializer(dims=30,energy=100,size=25, lowerbound=0.0, upperbound=1.0)
 
 emas = ElEmasService
 
@@ -39,10 +41,10 @@ migration_minimum = lambda: 120
 newborn_energy = lambda: 100
 transferred_energy = lambda: 40
 
-prestige_minimum = lambda : 5
+prestige_minimum = lambda : 100
 
 
-evaluation = lambda: ZDT2Evaluation()
+evaluation = lambda: ZDT1Evaluation()
 crossover = SinglePointCrossover
 mutation = lambda : UniformFloatMutationWithFix(0.0,1.0)
 
@@ -52,4 +54,4 @@ migration = ParentMigrationWithElite
 
 locator = lambda: TorusLocator(10, 10)
 
-stats = lambda: MultiObjectiveStats('fitness_%s_pyage.txt' % __name__)
+stats = lambda: MultiObjectiveStats(evaluation().getFront,'fitness_%s_pyage.txt' % __name__)
