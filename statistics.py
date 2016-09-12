@@ -10,7 +10,7 @@ class MultiObjectiveStats(Statistics):
     def __init__(self,front_fun, file_name='stats.txt'):
         self.front_fun = front_fun
         self.plot_file_name = file_name
-        self.hv = HyperVolume([5,5])
+        self.hv = HyperVolume([1,1])
 
     def update(self, step_count, agents):
         x = filter(lambda x: x.name == "elitist",agents)[0]
